@@ -1,0 +1,129 @@
+using System;
+using SharpDX.DirectInput;
+using System.Linq;
+
+namespace EnumDevicesApp
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        //[STAThread]
+        static void Main()
+        {
+            MainForJoystick();
+            //MainForKeyboard();
+        }
+
+        static void MainForJoystick()
+        {
+            // Initialize DirectInput
+            var directInput = new DirectInput();
+
+            // Find a Joystick Guid
+            var joystickGuid = Guid.Empty;
+
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
+                joystickGuid = deviceInstance.InstanceGuid;
+
+            // If Gamepad not found, look for a Joystick
+            if (joystickGuid == Guid.Empty)
+                foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
+                    joystickGuid = deviceInstance.InstanceGuid;
+
+            // If Joystick not found, throws an error
+            if (joystickGuid == Guid.Empty)
+            {
+                Console.WriteLine("No joystick/Gamepad found.");
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
+
+            // Instantiate the joystick
+            var joystick = new Joystick(directInput, joystickGuid);
+
+            Console.WriteLine("Found Joystick/Gamepad with GUID: {0}", joystickGuid);
+
+            // Query all suported ForceFeedback effects
+            var allEffects = joystick.GetEffects();
+            foreach (var effectInfo in allEffects)
+                Console.WriteLine("Effect available {0}", effectInfo.Name);
+
+            // Set BufferSize in order to use buffered data.
+            joystick.Properties.BufferSize = 128;
+
+            // Acquire the joystick
+            joystick.Acquire();
+            
+            
+            string[] listdevices;
+            int devicecount;
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
+            {
+                Console.WriteLine(deviceInstance.InstanceName.ToString() + deviceInstance.InstanceGuid.ToString());
+            }
+
+
+            // Poll events from joystick
+            while (true)
+            {
+                joystick.Poll();
+                var datas = joystick.GetBufferedData();
+                int mode = 3;
+
+                string statestring;
+                foreach (var state in datas)
+                {
+                if (mode == 0)
+                {
+                    Console.WriteLine(state);
+                    //System.Threading.Thread.Sleep(500);
+                }
+                else if (mode == 1)
+                {
+                    statestring = state.ToString();
+                    if (statestring.Contains("X") || statestring.Contains("Y"))
+                    {
+                        Console.WriteLine(state.ToString());
+                    }
+                }
+                else if (mode == 2)
+                {
+                    int currentstate = joystick.GetCurrentState().X;
+                    statestring = currentstate.ToString();
+                    Console.WriteLine(statestring);
+                }
+                }
+                
+            }
+        }
+
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        //[STAThread]
+        static void MainForKeyboard()
+        {
+            // Initialize DirectInput
+            var directInput = new DirectInput();
+
+            // Instantiate the joystick
+            var keyboard = new Keyboard(directInput);
+
+            // Acquire the joystick
+            keyboard.Properties.BufferSize = 128;
+            keyboard.Acquire();
+
+            // Poll events from joystick
+            while (true)
+            {
+                keyboard.Poll();
+                var datas = keyboard.GetBufferedData();
+                foreach (var state in datas)
+                    Console.WriteLine(state);
+            }
+        }
+
+    }

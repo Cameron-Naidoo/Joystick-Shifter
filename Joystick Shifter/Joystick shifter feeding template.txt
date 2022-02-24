@@ -1,0 +1,89 @@
+﻿var DInputJoystick = new Joystick(directInput, joystickGuid);
+            DInputJoystick.Properties.BufferSize = 128;
+            DInputJoystick.Acquire();
+
+            //feeding
+            bool btnpress;
+            // Reset this device to default values
+            joystick.ResetVJD(id);
+
+            
+
+            uint button = 1;
+            int axis = 0;
+
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                InputSimulator inputSimulator = new InputSimulator();
+                System.Threading.Thread.Sleep(1000);
+                
+                MessageBox.Show(inputSimulator.InputDeviceState.IsHardwareKeyDown((VirtualKeyCode)162).ToString());
+                //SharpDX.DirectInput.Key.
+                while (true)
+                {
+                    //range is 0 32511 65535
+                    if (inputSimulator.InputDeviceState.IsHardwareKeyDown(VirtualKeyCode.LCONTROL))
+                    {
+                        MessageBox.Show("LCTRL");
+                    }
+                    if (DInputJoystick.GetCurrentState().Buttons[5] == true)                     
+                        selectGear(0);
+                    if ((DInputJoystick.GetCurrentState().X == 0) && (DInputJoystick.GetCurrentState().Y == 0))
+                        selectGear(1);
+                    if ((DInputJoystick.GetCurrentState().X == 0) && (DInputJoystick.GetCurrentState().Y == 65535))
+                        selectGear(2);
+                    if ((DInputJoystick.GetCurrentState().X == 32511) && (DInputJoystick.GetCurrentState().Y == 0))
+                        selectGear(3);
+                    if ((DInputJoystick.GetCurrentState().X == 32511) && (DInputJoystick.GetCurrentState().Y == 65535))
+                        selectGear(4);
+                    if ((DInputJoystick.GetCurrentState().X == 65535) && (DInputJoystick.GetCurrentState().Y == 0))
+                        selectGear(5);
+                    if ((DInputJoystick.GetCurrentState().X == 65535) && (DInputJoystick.GetCurrentState().Y == 65535))
+                        selectGear(6);
+                }
+
+            }).Start();
+            
+            /*//demo feeding
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                while (true)
+                {
+
+                    btnpress = joystick.SetBtn(true, id, button);
+                    btnpress = joystick.SetAxis(axis, id, HID_USAGES.HID_USAGE_RX);
+                    Thread.Sleep(2000);
+
+                    btnpress = joystick.SetBtn(false, id, button);
+                    button++;
+                    axis = 100000;
+
+                }
+
+            }).Start();*/
+
+        }
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var programcs = new Program();
+            programcs.Feed();
+        }
+
+        private void selectGear(uint gear)
+        {
+            for (uint i = 1; i < 8; i++)
+            {
+                if (i != gear)
+                    joystick.SetBtn(false, id, i);
+            }
+
+            if (gear != 0)
+                joystick.SetBtn(true, id, gear);
+        }
+    }

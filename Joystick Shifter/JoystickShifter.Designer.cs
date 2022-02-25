@@ -63,6 +63,7 @@ namespace Joystick_Shifter
             this.rbtnvJoyMode = new System.Windows.Forms.RadioButton();
             this.btnDetectInputR = new System.Windows.Forms.Button();
             this.btnDetectInputN = new System.Windows.Forms.Button();
+            this.btnUpdateDInputDevices = new System.Windows.Forms.Button();
             this.pnlProfileManagement.SuspendLayout();
             this.pnlConfiguration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudvJoyDeviceNumber)).BeginInit();
@@ -134,6 +135,7 @@ namespace Joystick_Shifter
             // 
             // pnlConfiguration
             // 
+            this.pnlConfiguration.Controls.Add(this.btnUpdateDInputDevices);
             this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutputN);
             this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutputR);
             this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput6);
@@ -650,7 +652,7 @@ namespace Joystick_Shifter
             // lbxInputDevicesList
             // 
             this.lbxInputDevicesList.FormattingEnabled = true;
-            this.lbxInputDevicesList.Location = new System.Drawing.Point(156, 20);
+            this.lbxInputDevicesList.Location = new System.Drawing.Point(156, 31);
             this.lbxInputDevicesList.MultiColumn = true;
             this.lbxInputDevicesList.Name = "lbxInputDevicesList";
             this.lbxInputDevicesList.Size = new System.Drawing.Size(219, 95);
@@ -707,6 +709,16 @@ namespace Joystick_Shifter
             this.btnDetectInputN.Text = "Detect";
             this.btnDetectInputN.UseVisualStyleBackColor = true;
             this.btnDetectInputN.Click += new System.EventHandler(this.btnDetectInputN_Click);
+            // 
+            // btnUpdateDInputDevices
+            // 
+            this.btnUpdateDInputDevices.Location = new System.Drawing.Point(300, 3);
+            this.btnUpdateDInputDevices.Name = "btnUpdateDInputDevices";
+            this.btnUpdateDInputDevices.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateDInputDevices.TabIndex = 4;
+            this.btnUpdateDInputDevices.Text = "Update";
+            this.btnUpdateDInputDevices.UseVisualStyleBackColor = true;
+            this.btnUpdateDInputDevices.Click += new System.EventHandler(this.btnUpdateDInputDevices_Click);
             // 
             // JoystickShifter
             // 
@@ -768,6 +780,7 @@ namespace Joystick_Shifter
         private System.Windows.Forms.Button btnDetectKeyboardOutput1;
         private System.Windows.Forms.Button btnDetectInputR;
         private System.Windows.Forms.Button btnDetectInputN;
+        private System.Windows.Forms.Button btnUpdateDInputDevices;
     }
 }
 

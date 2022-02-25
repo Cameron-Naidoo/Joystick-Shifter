@@ -40,31 +40,7 @@ namespace Joystick_Shifter
             }
             #endregion
 
-            #region Initialise DirectInput
-            //TODO: update when input devices plugged; handle no devices plugged
-            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
-            {
-                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
-                inputName.Add(deviceInstance.InstanceName);
-                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
-            }
-            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Flight, DeviceEnumerationFlags.AllDevices))
-            {
-                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
-                inputName.Add(deviceInstance.InstanceName);
-                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
-            }
-            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
-            {
-                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
-                inputName.Add(deviceInstance.InstanceName);
-                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
-            }
-            if (lbxInputDevicesList.Items.Count > 0)
-            {
-                lbxInputDevicesList.SelectedIndex = 0;
-            }
-            #endregion
+            initialiseDInput(); //first initialisation of DInput; happens again on pressing Start button or Update button
 
             #region Initialise input/output buttons values
             //TODO: probably move away from this and populate keyboard output at design time
@@ -105,15 +81,60 @@ namespace Joystick_Shifter
             #endregion
         }
 
+        #region Initialise DInput
+        private void initialiseDInput()
+        {
+            //TODO: disable relevant UI elements when there are no input devices connected, perhaps use panelling for easier control
+            //clear everthing to create fresh lists
+            lbxInputDevicesList.Items.Clear();
+            inputName.Clear();
+            inputGuid.Clear();
+
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
+            {
+                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
+                inputName.Add(deviceInstance.InstanceName);
+                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
+            }
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Flight, DeviceEnumerationFlags.AllDevices))
+            {
+                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
+                inputName.Add(deviceInstance.InstanceName);
+                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
+            }
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
+            {
+                lbxInputDevicesList.Items.Add(deviceInstance.InstanceName + " (" + deviceInstance.InstanceGuid + ")");
+                inputName.Add(deviceInstance.InstanceName);
+                inputGuid.Add(deviceInstance.InstanceGuid.ToString());
+            }
+            if (lbxInputDevicesList.Items.Count > 0)
+                lbxInputDevicesList.SelectedIndex = 0;
+        }
+        private void btnUpdateDInputDevices_Click(object sender, EventArgs e)
+        {
+            initialiseDInput();
+        }
+        #endregion
+
         #region Profile handling
         private void btnSaveProfile_Click(object sender, EventArgs e)
         {
-            //TODO: error catch: are any input devices connected?; overwrite handling; some sort of feedback that saving was done, maybe disable button; disallow save button if no text in profile textbox; only allow vJoy devices that are enabled to be selected as vJoy device; disable keyboard stuff if vJoy selected
-            //TODO must clearly describe how veritcal/horizontal activation zone is intrepreted
+            //TODO: error catch: some sort of feedback that saving was done, maybe disable button; disallow save button if no text in profile textbox; only allow vJoy devices that are enabled to be selected as vJoy device; disable keyboard stuff if vJoy selected
+            //TODO must clearly describe how vertical/horizontal activation zone is intrepreted
+            
+            //prevent saving if no input devices are connected
+            if (inputGuid.Count == 0)
+            {
+                MessageBox.Show("No input devices are connected", "Can't save");
+                return;
+            }
+
             string profileFile = "profiles/" + tboxProfileName.Text + ".txt";
             if (!System.IO.Directory.Exists("profiles/"))
                 System.IO.Directory.CreateDirectory("profiles");
 
+            //prompt to overwrite if file already exists
             if (File.Exists(profileFile))
             {
                 if (MessageBox.Show("Overwrite " + tboxProfileName.Text + "?", "Profile exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
@@ -121,6 +142,8 @@ namespace Joystick_Shifter
                     return;
                 }
             }
+
+            //or else if file doesn't already exist, create new ProfilesList listbox entry
             else
             {
                 lbxProfilesList.Items.Add(tboxProfileName.Text);
@@ -176,11 +199,7 @@ namespace Joystick_Shifter
                 tboxProfileName.Text = "";
             }
             else
-            {
-                btnDeleteProfile.Enabled = true;
-                btnStart.Enabled = true;
-                tboxProfileName.Text = lbxProfilesList.SelectedItem.ToString();
-
+            {               
                 int index = 0;
                 foreach (string line in File.ReadAllLines("profiles/" + lbxProfilesList.SelectedItem.ToString() + ".txt"))
                 {
@@ -208,6 +227,10 @@ namespace Joystick_Shifter
                 cbxKeyboardOutput6.Text = settings[12];
                 cbxKeyboardOutputR.Text = settings[13];
                 cbxKeyboardOutputN.Text = settings[14];
+
+                btnDeleteProfile.Enabled = true;
+                btnStart.Enabled = true;
+                tboxProfileName.Text = lbxProfilesList.SelectedItem.ToString();
             }
         }
 
@@ -310,13 +333,23 @@ namespace Joystick_Shifter
         #region Feeding
         private void btnStart_Click(object sender, EventArgs e)
         {
-            //TODO disable all app interaction while feeding
-            //TODO check if saved dInput device is actually connected now; do all checks to see if vJoy or DInput devices are free to be acquired and whatever else
+            //TODO disable all program interaction while feeding
+            //TODO do all checks to see if vJoy or DInput devices are free to be acquired and whatever else
             //TODO run with admin privileges?
 
-            //Determine/Broadcast starting/stopping feeding
+            //potentially start feeding thread
             if (btnStart.Text == "Start")
-                btnStart.Text = "Stop";
+            {
+                initialiseDInput(); //initialise DInput again to check if dInput controller saved in config is actually connected right now
+                if (inputGuid.Contains(settings[2])) //start feeding only if dInput controller saved in config is actually connected right now
+                    btnStart.Text = "Stop";
+                else
+                {
+                    MessageBox.Show("Your saved controller is not connected", "Can't start");
+                    return;
+                }
+            }
+            //The feeding thread only runs so long as the button text is "Stop". If the text is "Stop", a click will turn it to "Start", so that the feeding thread stops.
             else if (btnStart.Text == "Stop")
             {
                 selectGear(0);
@@ -334,8 +367,10 @@ namespace Joystick_Shifter
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
+                //this thread will run until "Stop" is clicked
                 while (btnStart.Text == "Stop")
                 {
+                    //check axes positions to ascertain desired gear
                     if ((diJoystick.GetCurrentState().X < hRange * (100 - hAZone)) && (diJoystick.GetCurrentState().Y < hRange * (100 - vAZone)))
                         selectGear(1);
                     if ((diJoystick.GetCurrentState().X < hRange * (100 - hAZone)) && (diJoystick.GetCurrentState().Y > hRange * (vAZone)))
@@ -348,6 +383,7 @@ namespace Joystick_Shifter
                         selectGear(5);
                     if ((diJoystick.GetCurrentState().X > hRange * (hAZone)) && (diJoystick.GetCurrentState().Y > hRange * (vAZone)))
                         selectGear(6);
+                    //check button press to ascertain neutral or reverse
                     if (diJoystick.GetCurrentState().Buttons[Int32.Parse(settings[3].Substring(7, settings[3].Length - 7)) - 1])
                         selectGear(7);
                     if (diJoystick.GetCurrentState().Buttons[Int32.Parse(settings[4].Substring(7, settings[4].Length - 7)) - 1])
@@ -356,7 +392,7 @@ namespace Joystick_Shifter
             }).Start();
         }
 
-        private void selectGear(uint gear)
+        private void selectGear(uint gear) //uint gear 1-6, 7 is reverse, 8 is neutral
         {
             if (settings[1] == "vJoy")
             {

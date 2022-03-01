@@ -16,3 +16,21 @@ F:\Programming\Joystick Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.exe
 F:\Programming\Joystick Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.pdb
 F:\Programming\Joystick Shifter\Joystick Shifter\bin\Debug\WindowsInput.pdb
 F:\Programming\Joystick Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.csprojAssemblyReference.cache
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\Joystick Shifter.exe
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\Joystick Shifter.pdb
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\SharpDX.DirectInput.dll
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\SharpDX.dll
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\vJoyInterfaceWrap.dll
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\WindowsInput.dll
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\SharpDX.xml
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\SharpDX.DirectInput.xml
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\WindowsInput.pdb
+F:\Programming\Joystick-Shifter\Joystick Shifter\bin\Debug\WindowsInput.xml
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.csprojAssemblyReference.cache
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick_Shifter.JoystickShifter.resources
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick_Shifter.Properties.Resources.resources
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.csproj.GenerateResource.cache
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.csproj.CoreCompileInputs.cache
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.csproj.CopyComplete
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.exe
+F:\Programming\Joystick-Shifter\Joystick Shifter\obj\Debug\Joystick Shifter.pdb

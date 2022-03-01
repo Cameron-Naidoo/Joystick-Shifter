@@ -36,6 +36,7 @@ namespace Joystick_Shifter
             this.btnDeleteProfile = new System.Windows.Forms.Button();
             this.btnSaveProfile = new System.Windows.Forms.Button();
             this.pnlConfiguration = new System.Windows.Forms.Panel();
+            this.btnUpdateDInputDevices = new System.Windows.Forms.Button();
             this.btnDetectKeyboardOutputN = new System.Windows.Forms.Button();
             this.btnDetectKeyboardOutputR = new System.Windows.Forms.Button();
             this.btnDetectKeyboardOutput6 = new System.Windows.Forms.Button();
@@ -63,13 +64,14 @@ namespace Joystick_Shifter
             this.rbtnvJoyMode = new System.Windows.Forms.RadioButton();
             this.btnDetectInputR = new System.Windows.Forms.Button();
             this.btnDetectInputN = new System.Windows.Forms.Button();
-            this.btnUpdateDInputDevices = new System.Windows.Forms.Button();
+            this.pnlKeyboardOutput = new System.Windows.Forms.Panel();
             this.pnlProfileManagement.SuspendLayout();
             this.pnlConfiguration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudvJoyDeviceNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHorizontalActivationZone)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudVerticalActivationZone)).BeginInit();
             this.pnlOutputType.SuspendLayout();
+            this.pnlKeyboardOutput.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -135,38 +137,33 @@ namespace Joystick_Shifter
             // 
             // pnlConfiguration
             // 
-            this.pnlConfiguration.Controls.Add(this.btnUpdateDInputDevices);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutputN);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutputR);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput6);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput5);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput4);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput3);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput2);
-            this.pnlConfiguration.Controls.Add(this.btnDetectKeyboardOutput1);
+            this.pnlConfiguration.Controls.Add(this.pnlKeyboardOutput);
+            this.pnlConfiguration.Controls.Add(this.btnDetectInputN);
+            this.pnlConfiguration.Controls.Add(this.btnDetectInputR);
             this.pnlConfiguration.Controls.Add(this.nudvJoyDeviceNumber);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutputN);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutputR);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput6);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput5);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput4);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput3);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput2);
-            this.pnlConfiguration.Controls.Add(this.cbxKeyboardOutput1);
             this.pnlConfiguration.Controls.Add(this.nudHorizontalActivationZone);
             this.pnlConfiguration.Controls.Add(this.nudVerticalActivationZone);
             this.pnlConfiguration.Controls.Add(this.cbxInputN);
             this.pnlConfiguration.Controls.Add(this.cbxInputR);
-            this.pnlConfiguration.Controls.Add(this.lbxInputDevicesList);
             this.pnlConfiguration.Controls.Add(this.pnlOutputType);
-            this.pnlConfiguration.Location = new System.Drawing.Point(400, 12);
+            this.pnlConfiguration.Location = new System.Drawing.Point(351, 140);
             this.pnlConfiguration.Name = "pnlConfiguration";
-            this.pnlConfiguration.Size = new System.Drawing.Size(388, 434);
+            this.pnlConfiguration.Size = new System.Drawing.Size(446, 298);
             this.pnlConfiguration.TabIndex = 2;
+            // 
+            // btnUpdateDInputDevices
+            // 
+            this.btnUpdateDInputDevices.Location = new System.Drawing.Point(710, 12);
+            this.btnUpdateDInputDevices.Name = "btnUpdateDInputDevices";
+            this.btnUpdateDInputDevices.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateDInputDevices.TabIndex = 4;
+            this.btnUpdateDInputDevices.Text = "Update";
+            this.btnUpdateDInputDevices.UseVisualStyleBackColor = true;
+            this.btnUpdateDInputDevices.Click += new System.EventHandler(this.btnUpdateDInputDevices_Click);
             // 
             // btnDetectKeyboardOutputN
             // 
-            this.btnDetectKeyboardOutputN.Location = new System.Drawing.Point(173, 391);
+            this.btnDetectKeyboardOutputN.Location = new System.Drawing.Point(3, 262);
             this.btnDetectKeyboardOutputN.Name = "btnDetectKeyboardOutputN";
             this.btnDetectKeyboardOutputN.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutputN.TabIndex = 23;
@@ -176,7 +173,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutputR
             // 
-            this.btnDetectKeyboardOutputR.Location = new System.Drawing.Point(173, 348);
+            this.btnDetectKeyboardOutputR.Location = new System.Drawing.Point(3, 219);
             this.btnDetectKeyboardOutputR.Name = "btnDetectKeyboardOutputR";
             this.btnDetectKeyboardOutputR.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutputR.TabIndex = 22;
@@ -186,7 +183,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput6
             // 
-            this.btnDetectKeyboardOutput6.Location = new System.Drawing.Point(173, 312);
+            this.btnDetectKeyboardOutput6.Location = new System.Drawing.Point(3, 183);
             this.btnDetectKeyboardOutput6.Name = "btnDetectKeyboardOutput6";
             this.btnDetectKeyboardOutput6.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput6.TabIndex = 21;
@@ -196,7 +193,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput5
             // 
-            this.btnDetectKeyboardOutput5.Location = new System.Drawing.Point(173, 277);
+            this.btnDetectKeyboardOutput5.Location = new System.Drawing.Point(3, 148);
             this.btnDetectKeyboardOutput5.Name = "btnDetectKeyboardOutput5";
             this.btnDetectKeyboardOutput5.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput5.TabIndex = 20;
@@ -206,7 +203,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput4
             // 
-            this.btnDetectKeyboardOutput4.Location = new System.Drawing.Point(173, 248);
+            this.btnDetectKeyboardOutput4.Location = new System.Drawing.Point(3, 119);
             this.btnDetectKeyboardOutput4.Name = "btnDetectKeyboardOutput4";
             this.btnDetectKeyboardOutput4.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput4.TabIndex = 19;
@@ -216,7 +213,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput3
             // 
-            this.btnDetectKeyboardOutput3.Location = new System.Drawing.Point(173, 205);
+            this.btnDetectKeyboardOutput3.Location = new System.Drawing.Point(3, 76);
             this.btnDetectKeyboardOutput3.Name = "btnDetectKeyboardOutput3";
             this.btnDetectKeyboardOutput3.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput3.TabIndex = 18;
@@ -226,7 +223,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput2
             // 
-            this.btnDetectKeyboardOutput2.Location = new System.Drawing.Point(173, 171);
+            this.btnDetectKeyboardOutput2.Location = new System.Drawing.Point(3, 42);
             this.btnDetectKeyboardOutput2.Name = "btnDetectKeyboardOutput2";
             this.btnDetectKeyboardOutput2.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput2.TabIndex = 17;
@@ -236,7 +233,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectKeyboardOutput1
             // 
-            this.btnDetectKeyboardOutput1.Location = new System.Drawing.Point(173, 132);
+            this.btnDetectKeyboardOutput1.Location = new System.Drawing.Point(3, 3);
             this.btnDetectKeyboardOutput1.Name = "btnDetectKeyboardOutput1";
             this.btnDetectKeyboardOutput1.Size = new System.Drawing.Size(75, 23);
             this.btnDetectKeyboardOutput1.TabIndex = 16;
@@ -247,7 +244,7 @@ namespace Joystick_Shifter
             // nudvJoyDeviceNumber
             // 
             this.nudvJoyDeviceNumber.Enabled = false;
-            this.nudvJoyDeviceNumber.Location = new System.Drawing.Point(19, 20);
+            this.nudvJoyDeviceNumber.Location = new System.Drawing.Point(82, 6);
             this.nudvJoyDeviceNumber.Maximum = new decimal(new int[] {
             16,
             0,
@@ -271,7 +268,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutputN.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutputN.FormattingEnabled = true;
-            this.cbxKeyboardOutputN.Location = new System.Drawing.Point(254, 393);
+            this.cbxKeyboardOutputN.Location = new System.Drawing.Point(84, 264);
             this.cbxKeyboardOutputN.Name = "cbxKeyboardOutputN";
             this.cbxKeyboardOutputN.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutputN.TabIndex = 14;
@@ -280,7 +277,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutputR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutputR.FormattingEnabled = true;
-            this.cbxKeyboardOutputR.Location = new System.Drawing.Point(254, 350);
+            this.cbxKeyboardOutputR.Location = new System.Drawing.Point(84, 221);
             this.cbxKeyboardOutputR.Name = "cbxKeyboardOutputR";
             this.cbxKeyboardOutputR.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutputR.TabIndex = 13;
@@ -289,7 +286,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput6.FormattingEnabled = true;
-            this.cbxKeyboardOutput6.Location = new System.Drawing.Point(254, 314);
+            this.cbxKeyboardOutput6.Location = new System.Drawing.Point(84, 185);
             this.cbxKeyboardOutput6.Name = "cbxKeyboardOutput6";
             this.cbxKeyboardOutput6.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput6.TabIndex = 12;
@@ -298,7 +295,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput5.FormattingEnabled = true;
-            this.cbxKeyboardOutput5.Location = new System.Drawing.Point(254, 277);
+            this.cbxKeyboardOutput5.Location = new System.Drawing.Point(84, 148);
             this.cbxKeyboardOutput5.Name = "cbxKeyboardOutput5";
             this.cbxKeyboardOutput5.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput5.TabIndex = 11;
@@ -307,7 +304,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput4.FormattingEnabled = true;
-            this.cbxKeyboardOutput4.Location = new System.Drawing.Point(254, 250);
+            this.cbxKeyboardOutput4.Location = new System.Drawing.Point(84, 121);
             this.cbxKeyboardOutput4.Name = "cbxKeyboardOutput4";
             this.cbxKeyboardOutput4.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput4.TabIndex = 10;
@@ -316,7 +313,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput3.FormattingEnabled = true;
-            this.cbxKeyboardOutput3.Location = new System.Drawing.Point(254, 207);
+            this.cbxKeyboardOutput3.Location = new System.Drawing.Point(84, 78);
             this.cbxKeyboardOutput3.Name = "cbxKeyboardOutput3";
             this.cbxKeyboardOutput3.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput3.TabIndex = 9;
@@ -325,7 +322,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput2.FormattingEnabled = true;
-            this.cbxKeyboardOutput2.Location = new System.Drawing.Point(254, 171);
+            this.cbxKeyboardOutput2.Location = new System.Drawing.Point(84, 42);
             this.cbxKeyboardOutput2.Name = "cbxKeyboardOutput2";
             this.cbxKeyboardOutput2.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput2.TabIndex = 8;
@@ -334,7 +331,7 @@ namespace Joystick_Shifter
             // 
             this.cbxKeyboardOutput1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKeyboardOutput1.FormattingEnabled = true;
-            this.cbxKeyboardOutput1.Location = new System.Drawing.Point(254, 132);
+            this.cbxKeyboardOutput1.Location = new System.Drawing.Point(84, 3);
             this.cbxKeyboardOutput1.Name = "cbxKeyboardOutput1";
             this.cbxKeyboardOutput1.Size = new System.Drawing.Size(121, 21);
             this.cbxKeyboardOutput1.TabIndex = 7;
@@ -346,7 +343,7 @@ namespace Joystick_Shifter
             0,
             0,
             0});
-            this.nudHorizontalActivationZone.Location = new System.Drawing.Point(19, 261);
+            this.nudHorizontalActivationZone.Location = new System.Drawing.Point(93, 247);
             this.nudHorizontalActivationZone.Name = "nudHorizontalActivationZone";
             this.nudHorizontalActivationZone.Size = new System.Drawing.Size(120, 20);
             this.nudHorizontalActivationZone.TabIndex = 5;
@@ -363,7 +360,7 @@ namespace Joystick_Shifter
             0,
             0,
             0});
-            this.nudVerticalActivationZone.Location = new System.Drawing.Point(18, 226);
+            this.nudVerticalActivationZone.Location = new System.Drawing.Point(92, 212);
             this.nudVerticalActivationZone.Name = "nudVerticalActivationZone";
             this.nudVerticalActivationZone.Size = new System.Drawing.Size(120, 20);
             this.nudVerticalActivationZone.TabIndex = 4;
@@ -506,7 +503,7 @@ namespace Joystick_Shifter
             "Button 126",
             "Button 127",
             "Button 128"});
-            this.cbxInputN.Location = new System.Drawing.Point(18, 171);
+            this.cbxInputN.Location = new System.Drawing.Point(92, 157);
             this.cbxInputN.Name = "cbxInputN";
             this.cbxInputN.Size = new System.Drawing.Size(121, 21);
             this.cbxInputN.TabIndex = 3;
@@ -644,7 +641,7 @@ namespace Joystick_Shifter
             "Button 126",
             "Button 127",
             "Button 128"});
-            this.cbxInputR.Location = new System.Drawing.Point(18, 132);
+            this.cbxInputR.Location = new System.Drawing.Point(93, 118);
             this.cbxInputR.Name = "cbxInputR";
             this.cbxInputR.Size = new System.Drawing.Size(121, 21);
             this.cbxInputR.TabIndex = 2;
@@ -652,17 +649,17 @@ namespace Joystick_Shifter
             // lbxInputDevicesList
             // 
             this.lbxInputDevicesList.FormattingEnabled = true;
-            this.lbxInputDevicesList.Location = new System.Drawing.Point(156, 31);
-            this.lbxInputDevicesList.MultiColumn = true;
+            this.lbxInputDevicesList.HorizontalScrollbar = true;
+            this.lbxInputDevicesList.Location = new System.Drawing.Point(351, 39);
             this.lbxInputDevicesList.Name = "lbxInputDevicesList";
-            this.lbxInputDevicesList.Size = new System.Drawing.Size(219, 95);
+            this.lbxInputDevicesList.Size = new System.Drawing.Size(434, 95);
             this.lbxInputDevicesList.TabIndex = 1;
             // 
             // pnlOutputType
             // 
             this.pnlOutputType.Controls.Add(this.rbtnKeyboardMode);
             this.pnlOutputType.Controls.Add(this.rbtnvJoyMode);
-            this.pnlOutputType.Location = new System.Drawing.Point(15, 43);
+            this.pnlOutputType.Location = new System.Drawing.Point(78, 29);
             this.pnlOutputType.Name = "pnlOutputType";
             this.pnlOutputType.Size = new System.Drawing.Size(135, 49);
             this.pnlOutputType.TabIndex = 0;
@@ -678,6 +675,7 @@ namespace Joystick_Shifter
             this.rbtnKeyboardMode.TabStop = true;
             this.rbtnKeyboardMode.Text = "Keyboard";
             this.rbtnKeyboardMode.UseVisualStyleBackColor = true;
+            this.rbtnKeyboardMode.CheckedChanged += new System.EventHandler(this.rbtnKeyboardMode_CheckedChanged);
             // 
             // rbtnvJoyMode
             // 
@@ -692,7 +690,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectInputR
             // 
-            this.btnDetectInputR.Location = new System.Drawing.Point(337, 142);
+            this.btnDetectInputR.Location = new System.Drawing.Point(12, 116);
             this.btnDetectInputR.Name = "btnDetectInputR";
             this.btnDetectInputR.Size = new System.Drawing.Size(75, 23);
             this.btnDetectInputR.TabIndex = 3;
@@ -702,7 +700,7 @@ namespace Joystick_Shifter
             // 
             // btnDetectInputN
             // 
-            this.btnDetectInputN.Location = new System.Drawing.Point(337, 183);
+            this.btnDetectInputN.Location = new System.Drawing.Point(11, 155);
             this.btnDetectInputN.Name = "btnDetectInputN";
             this.btnDetectInputN.Size = new System.Drawing.Size(75, 23);
             this.btnDetectInputN.TabIndex = 3;
@@ -710,26 +708,39 @@ namespace Joystick_Shifter
             this.btnDetectInputN.UseVisualStyleBackColor = true;
             this.btnDetectInputN.Click += new System.EventHandler(this.btnDetectInputN_Click);
             // 
-            // btnUpdateDInputDevices
+            // pnlKeyboardOutput
             // 
-            this.btnUpdateDInputDevices.Location = new System.Drawing.Point(300, 3);
-            this.btnUpdateDInputDevices.Name = "btnUpdateDInputDevices";
-            this.btnUpdateDInputDevices.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdateDInputDevices.TabIndex = 4;
-            this.btnUpdateDInputDevices.Text = "Update";
-            this.btnUpdateDInputDevices.UseVisualStyleBackColor = true;
-            this.btnUpdateDInputDevices.Click += new System.EventHandler(this.btnUpdateDInputDevices_Click);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput1);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput1);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput2);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutputN);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput3);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutputR);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput4);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput6);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput5);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput5);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutput6);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput4);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutputR);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput3);
+            this.pnlKeyboardOutput.Controls.Add(this.cbxKeyboardOutputN);
+            this.pnlKeyboardOutput.Controls.Add(this.btnDetectKeyboardOutput2);
+            this.pnlKeyboardOutput.Location = new System.Drawing.Point(227, 6);
+            this.pnlKeyboardOutput.Name = "pnlKeyboardOutput";
+            this.pnlKeyboardOutput.Size = new System.Drawing.Size(210, 292);
+            this.pnlKeyboardOutput.TabIndex = 3;
             // 
             // JoystickShifter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnDetectInputN);
-            this.Controls.Add(this.btnDetectInputR);
             this.Controls.Add(this.pnlConfiguration);
             this.Controls.Add(this.pnlProfileManagement);
+            this.Controls.Add(this.btnUpdateDInputDevices);
             this.Controls.Add(this.btnStart);
+            this.Controls.Add(this.lbxInputDevicesList);
             this.Name = "JoystickShifter";
             this.Text = "Joystick Shifter";
             this.pnlProfileManagement.ResumeLayout(false);
@@ -740,6 +751,7 @@ namespace Joystick_Shifter
             ((System.ComponentModel.ISupportInitialize)(this.nudVerticalActivationZone)).EndInit();
             this.pnlOutputType.ResumeLayout(false);
             this.pnlOutputType.PerformLayout();
+            this.pnlKeyboardOutput.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -781,6 +793,7 @@ namespace Joystick_Shifter
         private System.Windows.Forms.Button btnDetectInputR;
         private System.Windows.Forms.Button btnDetectInputN;
         private System.Windows.Forms.Button btnUpdateDInputDevices;
+        private System.Windows.Forms.Panel pnlKeyboardOutput;
     }
 }
 

@@ -84,7 +84,6 @@ namespace Joystick_Shifter
         #region Initialise DInput
         private void initialiseDInput()
         {
-            //TODO: disable relevant UI elements when there are no input devices connected, perhaps use panelling for easier control
             //clear everthing to create fresh lists
             lbxInputDevicesList.Items.Clear();
             inputName.Clear();
@@ -109,7 +108,13 @@ namespace Joystick_Shifter
                 inputGuid.Add(deviceInstance.InstanceGuid.ToString());
             }
             if (lbxInputDevicesList.Items.Count > 0)
+            {
                 lbxInputDevicesList.SelectedIndex = 0;
+                pnlConfiguration.Enabled = true;
+            }
+            else
+                pnlConfiguration.Enabled = false;
+
         }
         private void btnUpdateDInputDevices_Click(object sender, EventArgs e)
         {
@@ -120,7 +125,7 @@ namespace Joystick_Shifter
         #region Profile handling
         private void btnSaveProfile_Click(object sender, EventArgs e)
         {
-            //TODO: error catch: some sort of feedback that saving was done, maybe disable button; disallow save button if no text in profile textbox; only allow vJoy devices that are enabled to be selected as vJoy device; disable keyboard stuff if vJoy selected
+            //TODO: some sort of feedback that saving was done, maybe disable button; only allow vJoy devices that are enabled to be selected as vJoy device; start saving controller name so that the user knows what controller was assigned
             //TODO must clearly describe how vertical/horizontal activation zone is intrepreted
             
             //prevent saving if no input devices are connected
@@ -177,14 +182,20 @@ namespace Joystick_Shifter
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Delete " + lbxProfilesList.SelectedItem + "?", "Delete profile?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-            {
-                //TODO: perhaps select next index after deleting from profile list    
+            {    
                 File.Delete("profiles/" + lbxProfilesList.SelectedItem.ToString() + ".txt");
+                
+                //int nextSelectedIndex allows for the index being set appropriately after deletion from the listbox is done
+                int nextSelectedIndex;
+                if (lbxProfilesList.SelectedIndex == 0) //if first item, set first item
+                    nextSelectedIndex = 0;
+                else //if not first item, set previous item
+                    nextSelectedIndex = lbxProfilesList.SelectedIndex - 1;
                 lbxProfilesList.Items.Remove(lbxProfilesList.SelectedItem);
                 if (lbxProfilesList.Items.Count != 0)
                 {
-                    lbxProfilesList.SelectedIndex = 0;
-                    tboxProfileName.Text = lbxProfilesList.Items[0].ToString();
+                    lbxProfilesList.SelectedIndex = nextSelectedIndex;
+                    tboxProfileName.Text = lbxProfilesList.SelectedItem.ToString();
                 }
             }
         }
@@ -249,6 +260,10 @@ namespace Joystick_Shifter
             nudvJoyDeviceNumber.Enabled = rbtnvJoyMode.Checked;
         }
 
+        private void rbtnKeyboardMode_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlKeyboardOutput.Enabled = rbtnKeyboardMode.Checked;
+        }
 
         #endregion
 
@@ -333,7 +348,6 @@ namespace Joystick_Shifter
         #region Feeding
         private void btnStart_Click(object sender, EventArgs e)
         {
-            //TODO disable all program interaction while feeding
             //TODO do all checks to see if vJoy or DInput devices are free to be acquired and whatever else
             //TODO run with admin privileges?
 
@@ -342,7 +356,10 @@ namespace Joystick_Shifter
             {
                 initialiseDInput(); //initialise DInput again to check if dInput controller saved in config is actually connected right now
                 if (inputGuid.Contains(settings[2])) //start feeding only if dInput controller saved in config is actually connected right now
+                {
                     btnStart.Text = "Stop";
+                    pnlProfileManagement.Enabled = false;
+                }
                 else
                 {
                     MessageBox.Show("Your saved controller is not connected", "Can't start");
@@ -354,6 +371,8 @@ namespace Joystick_Shifter
             {
                 selectGear(0);
                 btnStart.Text = "Start";
+                pnlProfileManagement.Enabled = true;
+                return;
             }
 
             diJoystick = new Joystick(directInput, new Guid(settings[2]));

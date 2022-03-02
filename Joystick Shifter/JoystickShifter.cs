@@ -22,7 +22,7 @@ namespace Joystick_Shifter
         DirectInput directInput = new DirectInput();
         Joystick diJoystick;
         InputSimulator inputSimulator = new InputSimulator();
-        //TODO: label everything; maybe change profile name textbox when item from profile list is clicked; MAPPING MODE; maybe disable keyboard output stuff when vJoy mode selected
+        //TODO: label everything
         List<string> inputName = new List<string>();
         List<string> inputGuid = new List<string>();
         string[] settings = new string[16];
@@ -43,7 +43,6 @@ namespace Joystick_Shifter
             initialiseDInput(); //first initialisation of DInput; happens again on pressing Start button or Update button
 
             #region Initialise input/output buttons values
-            //TODO: probably move away from this and populate keyboard output at design time
             //populate keyboard output comboboxes
             cbxKeyboardOutput1.DataSource = Enum.GetValues(typeof(VirtualKeyCode));
             cbxKeyboardOutput2.DataSource = Enum.GetValues(typeof(VirtualKeyCode));
@@ -125,7 +124,7 @@ namespace Joystick_Shifter
         #region Profile handling
         private void btnSaveProfile_Click(object sender, EventArgs e)
         {
-            //TODO: some sort of feedback that saving was done, maybe disable button; only allow vJoy devices that are enabled to be selected as vJoy device; start saving controller name so that the user knows what controller was assigned
+            //TODO: only allow vJoy devices that are enabled to be selected as vJoy device; start saving controller name so that the user knows what controller was assigned
             //TODO must clearly describe how vertical/horizontal activation zone is intrepreted
             
             //prevent saving if no input devices are connected
@@ -270,7 +269,8 @@ namespace Joystick_Shifter
         #region Map keyboard output
         private VirtualKeyCode GetPressedKeyboardKey()
         {
-            //TODO must add feedback to prompt user that keys are being listened for, allow abortion         
+            //TODO allow abortion?
+            //TODO BUGWATCH vk 60 was being reported as soon as this was called. There isn't even a vk 60...a restart fixed the issue
             while (true)
             {
                 for (int i = 1; i < 255; i++)
@@ -281,42 +281,66 @@ namespace Joystick_Shifter
 
         private void btnDetectKeyboardOutput1_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput1.Text = "Listening...";
+            btnDetectKeyboardOutput1.Refresh();
             cbxKeyboardOutput1.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput1.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutput2_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput2.Text = "Listening...";
+            btnDetectKeyboardOutput2.Refresh();
             cbxKeyboardOutput2.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput2.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutput3_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput3.Text = "Listening...";
+            btnDetectKeyboardOutput3.Refresh();
             cbxKeyboardOutput3.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput3.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutput4_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput4.Text = "Listening...";
+            btnDetectKeyboardOutput4.Refresh();
             cbxKeyboardOutput4.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput4.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutput5_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput5.Text = "Listening...";
+            btnDetectKeyboardOutput5.Refresh();
             cbxKeyboardOutput5.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput5.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutput6_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutput6.Text = "Listening...";
+            btnDetectKeyboardOutput6.Refresh();
             cbxKeyboardOutput6.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutput6.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutputR_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutputR.Text = "Listening...";
+            btnDetectKeyboardOutputR.Refresh();
             cbxKeyboardOutputR.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutputR.Text = "Detect";
         }
 
         private void btnDetectKeyboardOutputN_Click(object sender, EventArgs e)
         {
+            btnDetectKeyboardOutputN.Text = "Listening...";
+            btnDetectKeyboardOutputN.Refresh();
             cbxKeyboardOutputN.Text = GetPressedKeyboardKey().ToString();
+            btnDetectKeyboardOutputN.Text = "Detect";
         }
         #endregion
 
@@ -334,15 +358,20 @@ namespace Joystick_Shifter
         }
         private void btnDetectInputR_Click(object sender, EventArgs e)
         {
+            btnDetectInputR.Text = "Listening...";
+            btnDetectInputR.Refresh();
             cbxInputR.Text = "Button " + GetPressedControllerKey().ToString();
+            btnDetectInputR.Text = "Detect";
         }
 
         private void btnDetectInputN_Click(object sender, EventArgs e)
         {
+            btnDetectInputN.Text = "Listening...";
+            btnDetectInputN.Refresh();
             cbxInputN.Text = "Button " + GetPressedControllerKey().ToString();
+            btnDetectInputN.Text = "Detect";
         }
         #endregion
-
 
 
         #region Feeding
@@ -358,6 +387,7 @@ namespace Joystick_Shifter
                 if (inputGuid.Contains(settings[2])) //start feeding only if dInput controller saved in config is actually connected right now
                 {
                     btnStart.Text = "Stop";
+                    btnStart.Refresh();
                     pnlProfileManagement.Enabled = false;
                 }
                 else
@@ -369,8 +399,9 @@ namespace Joystick_Shifter
             //The feeding thread only runs so long as the button text is "Stop". If the text is "Stop", a click will turn it to "Start", so that the feeding thread stops.
             else if (btnStart.Text == "Stop")
             {
-                selectGear(0);
                 btnStart.Text = "Start";
+                btnStart.Refresh();
+                selectGear(0);
                 pnlProfileManagement.Enabled = true;
                 return;
             }
@@ -415,15 +446,35 @@ namespace Joystick_Shifter
         {
             if (settings[1] == "vJoy")
             {
+                //mapping mode
+                if ((chkMappingMode.Checked) && (btnStart.Text == "Stop"))
+                {
+                    for (int i = 0; i < 3; i++) //beep 3 times
+                    {
+                        Console.Beep();
+                        Thread.Sleep(200);
+                    }
+                    Console.Beep(1000, 100); //beep 4th time (pitch raised), just as key is to be pressed
+                    //press key then release key
+                    vJoyController.SetBtn(true, uint.Parse(settings[0]), gear);
+                    Thread.Sleep(200);
+                    vJoyController.SetBtn(false, uint.Parse(settings[0]), gear);
+                    Console.Beep(500, 200); // beep 5th time (pitch lowered), just as key is released
+                    return;
+                }
+
+
+                //release all gears but desired gear
                 for (uint i = 1; i < 7; i++)
                     if (i != gear)
                         vJoyController.SetBtn(false, uint.Parse(settings[0]), i);
 
+                //hold gear if desired gear is not neutral
                 if (gear != 8)
                     vJoyController.SetBtn(true, uint.Parse(settings[0]), gear);
+                //only _tap_ neutral if desired gear is neutral
                 else if (gear == 8)
-                {
-                    //only _tap_ neutral if desired gear is neutral
+                {                   
                     vJoyController.SetBtn(true, uint.Parse(settings[0]), gear);
                     Thread.Sleep(150);
                     vJoyController.SetBtn(false, uint.Parse(settings[0]), gear);
@@ -432,16 +483,36 @@ namespace Joystick_Shifter
 
             else if (settings[1] == "Keyboard")
             {
+                //mapping mode
+                if ((chkMappingMode.Checked) && (btnStart.Text == "Stop"))
+                {
+                    for (int i = 0; i < 3; i++) //beep 3 times
+                    {
+                        Console.Beep();
+                        Thread.Sleep(200);
+                    }
+                    Console.Beep(1000, 100); //beep 4th time (pitch raised), just as key is to be pressed
+                    //press key then release key
+                    inputSimulator.Keyboard.KeyDown((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));
+                    Thread.Sleep(150);
+                    inputSimulator.Keyboard.KeyUp((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));
+                    Console.Beep(500, 200); // beep 5th time (pitch lowered), just as key is released
+                    return;
+                }
+
+
+                //release all gears but desired gear
                 for (int i = 1; i < 7; i++)
                     if (i != gear)
                         inputSimulator.Keyboard.KeyUp((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[i + 6]));
 
                 Thread.Sleep(150); //sleep to prevent other programs from freezing
+                //hold gear if desired gear is not neutral
                 if (gear != 8)
                     inputSimulator.Keyboard.KeyDown((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));
+                //only _tap_ neutral if desired gear is neutral
                 else if (gear == 8)
                 {
-                    //only _tap_ neutral if desired gear is neutral
                     inputSimulator.Keyboard.KeyDown((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));
                     Thread.Sleep(150);
                     inputSimulator.Keyboard.KeyUp((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));

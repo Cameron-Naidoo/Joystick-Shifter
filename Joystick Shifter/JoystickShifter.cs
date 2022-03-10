@@ -19,13 +19,17 @@ namespace Joystick_Shifter
     {
         //TODO: check all vJoy statuses before allowing to continue
         static public vJoy vJoyController = new vJoy();
+        
         DirectInput directInput = new DirectInput();
         Joystick diJoystick;
+        
         InputSimulator inputSimulator = new InputSimulator();
-        //TODO: label everything
+
         List<string> inputName = new List<string>();
         List<string> inputGuid = new List<string>();
         string[] settings = new string[16];
+
+        string[] gears = {"1", "2", "3", "4", "5", "6", "R", "N"}; //just a list of gears (for the purposes of simplifying R and N) for the gear indicator
         public JoystickShifter()
         {
             InitializeComponent();
@@ -79,7 +83,7 @@ namespace Joystick_Shifter
             }
             #endregion
         }
-
+        
         #region Initialise DInput
         private void initialiseDInput()
         {
@@ -125,6 +129,7 @@ namespace Joystick_Shifter
         private void btnSaveProfile_Click(object sender, EventArgs e)
         {
             //TODO: only allow vJoy devices that are enabled to be selected as vJoy device; start saving controller name so that the user knows what controller was assigned
+            //TODO start thinking about differect/optional save directory, migration, for when there are updates and such
             //TODO must clearly describe how vertical/horizontal activation zone is intrepreted
             
             //prevent saving if no input devices are connected
@@ -356,7 +361,7 @@ namespace Joystick_Shifter
                         return i + 1;  //add 1 to account for indexing vs button number
             }
         }
-        private void btnDetectInputR_Click(object sender, EventArgs e)
+        private void btnDetectInputR_Click(object sender, EventArgs e) //TODO BUGWATCH someone shows that program crashes when press input detect buttons
         {
             btnDetectInputR.Text = "Listening...";
             btnDetectInputR.Refresh();
@@ -378,6 +383,7 @@ namespace Joystick_Shifter
         private void btnStart_Click(object sender, EventArgs e)
         {
             //TODO do all checks to see if vJoy or DInput devices are free to be acquired and whatever else
+            //TODO mapping mode needs to be simpler to understand
             //TODO run with admin privileges?
 
             //potentially start feeding thread
@@ -389,6 +395,7 @@ namespace Joystick_Shifter
                     btnStart.Text = "Stop";
                     btnStart.Refresh();
                     pnlProfileManagement.Enabled = false;
+                    lblGearIndicator.Visible = true;
                 }
                 else
                 {
@@ -401,8 +408,9 @@ namespace Joystick_Shifter
             {
                 btnStart.Text = "Start";
                 btnStart.Refresh();
-                selectGear(0);
+                selectGear(8);
                 pnlProfileManagement.Enabled = true;
+                lblGearIndicator.Visible = false;
                 return;
             }
 
@@ -435,9 +443,9 @@ namespace Joystick_Shifter
                         selectGear(6);
                     //check button press to ascertain neutral or reverse
                     if (diJoystick.GetCurrentState().Buttons[Int32.Parse(settings[3].Substring(7, settings[3].Length - 7)) - 1])
-                        selectGear(7);
+                        selectGear(7); //reverse
                     if (diJoystick.GetCurrentState().Buttons[Int32.Parse(settings[4].Substring(7, settings[4].Length - 7)) - 1])
-                        selectGear(8);
+                        selectGear(8); //neutral
                 }
             }).Start();
         }
@@ -474,11 +482,12 @@ namespace Joystick_Shifter
                     vJoyController.SetBtn(true, uint.Parse(settings[0]), gear);
                 //only _tap_ neutral if desired gear is neutral
                 else if (gear == 8)
-                {                   
+                {
                     vJoyController.SetBtn(true, uint.Parse(settings[0]), gear);
                     Thread.Sleep(150);
                     vJoyController.SetBtn(false, uint.Parse(settings[0]), gear);
                 }
+                lblGearIndicator.Invoke((MethodInvoker)(() => lblGearIndicator.Text = "Gear " + gears[gear - 1])); //show what gear is selected
             }
 
             else if (settings[1] == "Keyboard")
@@ -517,6 +526,7 @@ namespace Joystick_Shifter
                     Thread.Sleep(150);
                     inputSimulator.Keyboard.KeyUp((VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), settings[gear + 6]));
                 }
+                lblGearIndicator.Invoke((MethodInvoker)(() => lblGearIndicator.Text = "Gear " + gears[gear - 1])); //show what gear is selected
             }   
         }
         #endregion

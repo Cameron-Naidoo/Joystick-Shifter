@@ -13,6 +13,8 @@ using vJoyInterfaceWrap;
 using WindowsInput; //InputSimulator
 using WindowsInput.Native; //vk database for InputSimulator
 
+using System.Reflection;
+
 namespace Joystick_Shifter
 {
     public partial class JoystickShifter : Form
@@ -352,6 +354,7 @@ namespace Joystick_Shifter
         #region Map controller input
         private int GetPressedControllerKey()
         {
+            //TODO POVs aren't included
             diJoystick = new Joystick(directInput, new Guid(inputGuid[lbxInputDevicesList.SelectedIndex]));
             diJoystick.Acquire();
             while (true)
@@ -361,20 +364,46 @@ namespace Joystick_Shifter
                         return i + 1;  //add 1 to account for indexing vs button number
             }
         }
+
+        private void SetPressedControllerKey(ComboBox comboBox, Button button, int inputIndex)
+        {
+            //TODO POVs aren't included
+            //TODO finish this bullshit and disable bad components while waiting for key
+            diJoystick = new Joystick(directInput, new Guid(inputGuid[inputIndex]));
+            diJoystick.Acquire();
+            while (true)
+            {
+                for (int i = 0; i < 128; i++)
+                    if (diJoystick.GetCurrentState().Buttons[i] == true)
+                    {
+                        comboBox.Invoke((MethodInvoker)(() => comboBox.Text = "Button " + (i + 1).ToString()));  //add 1 to account for indexing vs button number
+                        button.Invoke((MethodInvoker)(() => button.Text = "Detect"));
+                        return;
+                    }
+                        
+            }
+        }
+
         private void btnDetectInputR_Click(object sender, EventArgs e) //TODO BUGWATCH someone shows that program crashes when press input detect buttons
         {
             btnDetectInputR.Text = "Listening...";
             btnDetectInputR.Refresh();
-            cbxInputR.Text = "Button " + GetPressedControllerKey().ToString();
-            btnDetectInputR.Text = "Detect";
+            int inputIndex = lbxInputDevicesList.SelectedIndex;
+            new Thread(() =>
+            {
+                SetPressedControllerKey(cbxInputR, btnDetectInputR, inputIndex);
+            }).Start();
         }
 
         private void btnDetectInputN_Click(object sender, EventArgs e)
         {
             btnDetectInputN.Text = "Listening...";
             btnDetectInputN.Refresh();
-            cbxInputN.Text = "Button " + GetPressedControllerKey().ToString();
-            btnDetectInputN.Text = "Detect";
+            int inputIndex = lbxInputDevicesList.SelectedIndex;
+            new Thread(() =>
+            {
+                SetPressedControllerKey(cbxInputN, btnDetectInputN, inputIndex);
+            }).Start();
         }
         #endregion
 

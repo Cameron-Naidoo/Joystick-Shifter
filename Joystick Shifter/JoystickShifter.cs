@@ -13,8 +13,6 @@ using vJoyInterfaceWrap;
 using WindowsInput; //InputSimulator
 using WindowsInput.Native; //vk database for InputSimulator
 
-using System.Reflection;
-
 namespace Joystick_Shifter
 {
     public partial class JoystickShifter : Form
@@ -273,16 +271,16 @@ namespace Joystick_Shifter
 
         #endregion
 
+        //TODO provide explanation of how to abort? should mouse buttons be eligible output keys?
         #region Map keyboard output
-        private VirtualKeyCode GetPressedKeyboardKey()
+        private string GetPressedKeyboardKey()
         {
-            //TODO allow abortion?
             //TODO BUGWATCH vk 60 was being reported as soon as this was called. There isn't even a vk 60...a restart fixed the issue
             while (true)
             {
                 for (int i = 1; i < 255; i++)
                     if (inputSimulator.InputDeviceState.IsHardwareKeyDown((VirtualKeyCode)i))
-                        return (VirtualKeyCode)i;
+                        return ((VirtualKeyCode)i).ToString();
             }
         }
 
@@ -290,7 +288,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput1.Text = "Listening...";
             btnDetectKeyboardOutput1.Refresh();
-            cbxKeyboardOutput1.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput1.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput1.Text = "Detect";
         }
 
@@ -298,7 +296,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput2.Text = "Listening...";
             btnDetectKeyboardOutput2.Refresh();
-            cbxKeyboardOutput2.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput2.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput2.Text = "Detect";
         }
 
@@ -306,7 +304,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput3.Text = "Listening...";
             btnDetectKeyboardOutput3.Refresh();
-            cbxKeyboardOutput3.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput3.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput3.Text = "Detect";
         }
 
@@ -314,7 +312,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput4.Text = "Listening...";
             btnDetectKeyboardOutput4.Refresh();
-            cbxKeyboardOutput4.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput4.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput4.Text = "Detect";
         }
 
@@ -322,7 +320,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput5.Text = "Listening...";
             btnDetectKeyboardOutput5.Refresh();
-            cbxKeyboardOutput5.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput5.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput5.Text = "Detect";
         }
 
@@ -330,7 +328,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutput6.Text = "Listening...";
             btnDetectKeyboardOutput6.Refresh();
-            cbxKeyboardOutput6.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutput6.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutput6.Text = "Detect";
         }
 
@@ -338,7 +336,7 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutputR.Text = "Listening...";
             btnDetectKeyboardOutputR.Refresh();
-            cbxKeyboardOutputR.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutputR.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutputR.Text = "Detect";
         }
 
@@ -346,30 +344,37 @@ namespace Joystick_Shifter
         {
             btnDetectKeyboardOutputN.Text = "Listening...";
             btnDetectKeyboardOutputN.Refresh();
-            cbxKeyboardOutputN.Text = GetPressedKeyboardKey().ToString();
+            cbxKeyboardOutputN.Text = GetPressedKeyboardKey();
             btnDetectKeyboardOutputN.Text = "Detect";
         }
         #endregion
 
         #region Map controller input
-        private int GetPressedControllerKey()
+        //TODO maybe default buttons should be 4 and 6?
+        private int GetPressedControllerKey(ComboBox sender)
         {
-            //TODO POVs aren't included
+            //TODO POVs aren't included, might wanna disable components while listening
             diJoystick = new Joystick(directInput, new Guid(inputGuid[lbxInputDevicesList.SelectedIndex]));
             diJoystick.Acquire();
             while (true)
             {
-                for (int i = 0; i < 128; i++)
-                    if (diJoystick.GetCurrentState().Buttons[i] == true)
-                        return i + 1;  //add 1 to account for indexing vs button number
+                for (int i = 0; i < 255; i++)
+                {
+                    //DInput buttons only go up to 127, whereas VitualKeyCode goes up to 254
+                    if (i < 128)
+                        if (diJoystick.GetCurrentState().Buttons[i] == true)
+                            return i;  //button 1 == Buttons[0] == buttons listbox[0]
+                    
+                    if (inputSimulator.InputDeviceState.IsHardwareKeyDown((VirtualKeyCode)i)) //also listen for keypresses/clicks to abort - this also prevents not responding
+                        return sender.SelectedIndex;
+                }
             }
         }
 
-        private void SetPressedControllerKey(ComboBox comboBox, Button button, int inputIndex)
+        //TODO possible remove deprecated
+        private void SetPressedControllerKey(ComboBox comboBox, Button button) //might use this in the future if it proves to be a better method again
         {
-            //TODO POVs aren't included
-            //TODO finish this bullshit and disable bad components while waiting for key
-            diJoystick = new Joystick(directInput, new Guid(inputGuid[inputIndex]));
+            //diJoystick = new Joystick(directInput, new Guid(inputGuid[selectedDInputIndex])); //create variable to access selected controller from another thread
             diJoystick.Acquire();
             while (true)
             {
@@ -388,22 +393,20 @@ namespace Joystick_Shifter
         {
             btnDetectInputR.Text = "Listening...";
             btnDetectInputR.Refresh();
-            int inputIndex = lbxInputDevicesList.SelectedIndex;
-            new Thread(() =>
-            {
-                SetPressedControllerKey(cbxInputR, btnDetectInputR, inputIndex);
-            }).Start();
+
+            cbxInputR.SelectedIndex = GetPressedControllerKey(cbxInputR);
+
+            btnDetectInputR.Text = "Detect";
         }
 
         private void btnDetectInputN_Click(object sender, EventArgs e)
         {
             btnDetectInputN.Text = "Listening...";
             btnDetectInputN.Refresh();
-            int inputIndex = lbxInputDevicesList.SelectedIndex;
-            new Thread(() =>
-            {
-                SetPressedControllerKey(cbxInputN, btnDetectInputN, inputIndex);
-            }).Start();
+
+            cbxInputN.SelectedIndex = GetPressedControllerKey(cbxInputN);
+
+            btnDetectInputN.Text = "Detect";
         }
         #endregion
 
